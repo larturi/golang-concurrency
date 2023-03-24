@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func Start() {
+func StartTodos() {
 	USE_GO_RUTINES := true
 	start := time.Now()
 

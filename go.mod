@@ -1,3 +1,3 @@
-module github.com/larturi/labs
+module pkgs
 
 go 1.18

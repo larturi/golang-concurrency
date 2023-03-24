@@ -1,9 +1,11 @@
 package main
 
 import (
-	"github.com/larturi/labs/todoservice"
+	"pkgs/labs"
 )
 
 func main() {
-	todoservice.Start()
+	// labs.StartTodos()
+
+	labs.StartHexa()
 }
