@@ -24,8 +24,14 @@ func Withdrawal(amount int, wg *sync.WaitGroup, lock *sync.RWMutex) {
 
 	lock.Lock()
 	b := balance
-	balance = b - amount
-	fmt.Printf("Withdrawal:      $ -%d\n", amount)
+
+	if balance >= amount {
+		balance = b - amount
+		fmt.Printf("Withdrawal:      $ -%d\n", amount)
+	} else {
+		fmt.Println("Saldo insuficiente")
+	}
+
 	lock.Unlock()
 }
 
@@ -53,7 +59,10 @@ func StartSyncCuentaBancaria() {
 	go Deposit(200, &wg, &lock)
 
 	wg.Add(1)
-	go Withdrawal(50, &wg, &lock)
+	go Withdrawal(1000, &wg, &lock)
+
+	wg.Add(1)
+	go Withdrawal(10, &wg, &lock)
 
 	wg.Wait()
 	println("Saldo actual:    $", Balance(&lock))
