@@ -1,34 +1,60 @@
 package labs
 
-import "sync"
-
-var (
-	balance int = 100
+import (
+	"fmt"
+	"sync"
 )
 
-func Deposit(amount int, wg *sync.WaitGroup, lock *sync.Mutex) {
+var (
+	balance int = 0
+)
+
+func Deposit(amount int, wg *sync.WaitGroup, lock *sync.RWMutex) {
 	defer wg.Done()
 
 	lock.Lock()
 	b := balance
 	balance = b + amount
+	fmt.Println("Deposit:         $", amount)
 	lock.Unlock()
 }
 
-func Balance() int {
+func Withdrawal(amount int, wg *sync.WaitGroup, lock *sync.RWMutex) {
+	defer wg.Done()
+
+	lock.Lock()
 	b := balance
+	balance = b - amount
+	fmt.Printf("Withdrawal:      $ -%d\n", amount)
+	lock.Unlock()
+}
+
+func Balance(lock *sync.RWMutex) int {
+	lock.RLock()
+	b := balance
+	lock.RUnlock()
+
 	return b
 }
 
 func StartSyncCuentaBancaria() {
 	var wg sync.WaitGroup
-	var lock sync.Mutex
+	var lock sync.RWMutex
 
-	for i := 1; i <= 5; i++ {
-		wg.Add(1)
-		go Deposit(i*100, &wg, &lock)
-	}
+	fmt.Println("Saldo al inicio: $", Balance(&lock))
+
+	wg.Add(1)
+	go Deposit(100, &wg, &lock)
+
+	wg.Add(1)
+	go Deposit(300, &wg, &lock)
+
+	wg.Add(1)
+	go Deposit(200, &wg, &lock)
+
+	wg.Add(1)
+	go Withdrawal(50, &wg, &lock)
 
 	wg.Wait()
-	println(Balance())
+	println("Saldo actual:    $", Balance(&lock))
 }
