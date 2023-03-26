@@ -23,5 +23,20 @@ func main() {
 	* > ./main
 	* Se resuelve usando Lock() y Unlock()
 	 */
-	labs.StartSyncCuentaBancaria()
+	// labs.StartSyncCuentaBancaria()
+
+	/*
+	* Sistema de Cache para calculo de Fibonacci
+	* Warning de DATA RACE
+	* > go build --race main.go
+	* > ./main
+	* Se resuelve usando Lock() y Unlock()
+	 */
+	labs.StartCacheFibo()
+
+	/*
+	* Sistema de Cache para calcul
+	 */
+	// labs.StartCache()
+
 }
